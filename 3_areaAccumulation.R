@@ -3,7 +3,7 @@ library(aomisc)
 library(ggplot2)
 library(drc)
 
-load(file = "E:/Thesis/DataAnalysis/Rarefaction/RarefactionLONGWCovs_20220629.rda")
+load(file = paste0(getwd(), "/sim/RarefactionLONGWCovs.rda"))
 
 # *********
 # LOOP ----
@@ -89,21 +89,7 @@ for(s in 1:length(seasons)){
 }
 allNewData <- do.call("rbind", allList)
 
-save(allNewData, file = "allPredictedData_20220722.rda")
-
+save(allNewData, file = "simPredictedData.rda")
+# 
 pred.df <- pred.df[with(pred.df, order(projName, UD, Contour)),]
-save(pred.df, file = "predictProjSummaries_20220722.rda")
-write.csv(pred.df, "predictProjSummaries_20220722.csv", row.names = F)
-
-# Plot single dataset ----
-pl <- ggplot(rare_long[rare_long$projName == "D7"
-                       & rare_long$UD == "winter",], 
-             aes(nAnimals, area_sqkm, color = as.factor(Contour))) + geom_point()
-pl + geom_line(data = allNewData[allNewData$projName == "D7"
-                                 & allNewData$UD == "winter",],
-               aes(group = as.factor(Contour)), color = "black") +
-  xlim(c(0,500))
-
-pl + geom_line(data = newdata,
-               aes(group = as.factor(Contour)), color = "black") +
-  xlim(c(0,500))
+save(pred.df, file = "predictProjSummaries.rda")
